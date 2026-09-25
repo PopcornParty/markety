@@ -1,0 +1,25 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --ignore-scripts
+      - run: npx prisma generate
+      - run: npx prisma validate
+      - run: npm run build
+      - name: Reminder
+        run: |
+          echo "GitHub Actions built Markety successfully."
+          echo "Deploy the compiled app to a persistent Node.js host."
+          echo "Provide DISCORD_TOKEN, DATABASE_URL, and MARKETY_OWNER_ID as host secrets."
+          echo "Do not store the Discord token in this workflow file."
