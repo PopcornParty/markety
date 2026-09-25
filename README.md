@@ -2,106 +2,110 @@
 
 A global Discord marketplace for community items such as Minecraft bases, stashes, pearl bases, spawners, builds, plots, islands, shops, and mystery shulkers.
 
-Markety does **not** move real money. `$` is the listing’s in-game currency. Trades happen in-game. Markety only records listings, offers, deals, vouches, and reports.
+Markety does **not** move real money. `$` is the listing’s in-game currency. Trades happen in-game. The bot only records listings, offers, deals, vouches, and reports.
+
+You can set this up on an **iPhone**. You do not install Node or Git.
+
+Host used in this guide: **[JustRunMy.App](https://justrunmy.app/discord-bots)**  
+Database: **[Neon](https://console.neon.tech)**  
+Code: **[https://github.com/PopcornParty/markety](https://github.com/PopcornParty/markety)**
+
+JustRunMy.App is built for Discord bots. It stays on 24/7 and does not use sleep mode like free Render or Replit.
 
 ---
 
-## If you only have an iPhone
+## What you will save in iPhone Notes
 
-You do **not** need a computer. You do **not** install Node, Git, or any app except Safari, Discord, and GitHub.
-
-Everything below is done in the phone browser.
-
-Free 24/7 hosting is possible, but it is not magic:
-
-- GitHub stores the code. It does **not** keep the bot online.
-- Render / Replit free web apps **sleep**. That knocks a Discord bot offline.
-- The path below uses **Neon** (free Postgres) + **Koyeb** (free Node host) + **cron-job.org** (free pinger so the host does not sleep).
-
-If a free host later adds a card check or a queue, use the backup host at the bottom. The secrets you type stay the same.
-
-Repo: **https://github.com/PopcornParty/markety**
-
----
-
-## What you will collect
-
-Write these four values in Notes on your iPhone. Do not post them in Discord or in the repo.
+Do not post these in Discord or GitHub.
 
 | Name | Where you get it |
 | --- | --- |
 | `DISCORD_TOKEN` | Discord Developer Portal → Bot → Reset Token |
 | `DISCORD_CLIENT_ID` | Discord Developer Portal → OAuth2 → Application ID |
-| `MARKETY_OWNER_ID` | Discord → You tab → App Settings → Advanced → Developer Mode on, then tap your avatar → Copy User ID |
-| `DATABASE_URL` | Neon dashboard after you create the database |
+| `MARKETY_OWNER_ID` | Discord app → You → App Settings → Advanced → Developer Mode on, then tap your avatar → Copy User ID |
+| `DATABASE_URL` | Neon → Connect → copy the `postgresql://` line |
 
 ---
 
-## Step 1 — Make sure the GitHub repo has the bot code
+## Step 1 — Create the Discord bot
 
-1. On your iPhone open the **GitHub** app or Safari: https://github.com/PopcornParty/markety
-2. You should see folders named `src`, `prisma`, and `tests`.
-3. If those folders are missing, the host cannot start the bot. The full project has to be pushed to that repo first.
-
-Do not upload a file named `.env`.
-
----
-
-## Step 2 — Create the Discord bot (Safari)
-
-1. Open https://discord.com/developers/applications and sign in.
-2. Tap **New Application**. Name it `Markety`. Create it.
-3. Tap **Bot**.
-4. Tap **Reset Token** → **Copy**. Paste into Notes as `DISCORD_TOKEN`.
-5. Leave privileged intents **off**.
-6. Tap **OAuth2**. Copy **Application ID** into Notes as `DISCORD_CLIENT_ID`.
-7. Tap **OAuth2 → URL Generator**.
-8. Tick scopes: `bot` and `applications.commands`.
-9. Tick bot permissions only: View Channels, Send Messages, Embed Links, Attach Files, Read Message History, Use External Emojis, Add Reactions.
-10. Do **not** tick Administrator.
-11. Copy the invite URL at the bottom, open it, pick your server, authorize.
-12. In the Discord iPhone app: **You** tab → **App Settings** → **Advanced** → turn on **Developer Mode**.
-13. Tap your profile picture → **Copy User ID**. Paste into Notes as `MARKETY_OWNER_ID`.
+1. Open Safari: https://discord.com/developers/applications
+2. Tap **New Application**. Name it `Markety`.
+3. Tap **Bot** → **Reset Token** → **Copy**. Save as `DISCORD_TOKEN`.
+4. Leave privileged intents off.
+5. Tap **OAuth2**. Copy **Application ID**. Save as `DISCORD_CLIENT_ID`.
+6. Tap **OAuth2 → URL Generator**.
+7. Tick scopes: `bot` and `applications.commands`.
+8. Tick permissions only: View Channels, Send Messages, Embed Links, Attach Files, Read Message History, Use External Emojis, Add Reactions.
+9. Do not tick Administrator.
+10. Open the invite URL, pick your server, authorize.
+11. In the Discord iPhone app: **You** → **App Settings** → **Advanced** → Developer Mode on.
+12. Tap your profile picture → **Copy User ID**. Save as `MARKETY_OWNER_ID`.
 
 Only that user ID can use `/admin`.
 
 ---
 
-## Step 3 — Create free PostgreSQL on Neon (Safari)
+## Step 2 — Create free Postgres on Neon
 
-1. Open https://console.neon.tech and sign up with GitHub.
+1. Open Safari: https://console.neon.tech and sign in with GitHub.
 2. Create a project named `markety`.
-3. Open **Connection details** and copy the URI (pooled if shown).
-4. Save it in Notes as `DATABASE_URL`.
-5. If it has no `sslmode=require`, add `?sslmode=require` or `&sslmode=require`.
+3. Open the project.
+4. Tap **Connect** at the top.
+5. Leave **Connection pooling** on.
+6. Copy the long line that starts with `postgresql://`.
+7. Save it as `DATABASE_URL`.
+
+If you ever pasted that URL in a chat, reset the Neon password and copy a new URL.
 
 ---
 
-## Step 4 — Put the bot online on Koyeb (Safari)
+## Step 3 — Download the Markety zip from GitHub
 
-1. Open https://app.koyeb.com and sign up with GitHub.
-2. Create a service from GitHub repo `PopcornParty/markety`, branch `main`.
-3. Use the **Free** instance as a **Web Service**.
-4. Add environment variables: `DISCORD_TOKEN`, `DISCORD_CLIENT_ID`, `MARKETY_OWNER_ID`, `DATABASE_URL`, `NODE_ENV=production`, `LOG_LEVEL=info`.
-5. Run command if asked:
+1. Open Safari: https://github.com/PopcornParty/markety
+2. Tap the green **Code** button.
+3. Tap **Download ZIP**.
+4. Open the **Files** app → **Downloads**.
+5. You should have `markety-main.zip`.
+
+Direct link: https://github.com/PopcornParty/markety/archive/refs/heads/main.zip
+
+Do not put secrets inside the zip. The unzipped folder needs `package.json`, `src`, and `prisma`.
+
+---
+
+## Step 4 — Put the bot on JustRunMy.App
+
+1. Open Safari: https://justrunmy.app
+2. Sign up / log in.
+3. Tap **Create Application**.
+4. Choose **Zip Upload** and upload `markety-main.zip`.
+5. Choose **Node.js**, version **20** or **22**.
+6. Add environment variables:
 
 ```text
-npx prisma migrate deploy && npx prisma generate && npm run register:commands && node dist/index.js
+DISCORD_TOKEN
+DISCORD_CLIENT_ID
+MARKETY_OWNER_ID
+DATABASE_URL
+NODE_ENV=production
+LOG_LEVEL=info
 ```
 
-6. Deploy. Open the public Koyeb URL. You should see `{"ok":true,"service":"markety"}`.
+7. Set the start command:
+
+```text
+npx prisma migrate deploy && npx prisma generate && npm run register:commands && npm start
+```
+
+8. If it asks for a port, use `3000`.
+9. Tap **Start** / **Deploy** and open **Logs**.
+
+JustRunMy.App does not need cron-job.org.
 
 ---
 
-## Step 5 — Stop the free host from sleeping (Safari)
-
-1. Open https://cron-job.org and create a free account.
-2. Create a job that hits `https://YOUR-KOYEB-URL/health` every 10 minutes.
-3. Enable it. This is what keeps the bot online overnight.
-
----
-
-## Step 6 — Check it in Discord
+## Step 5 — Check the bot in Discord
 
 Run `/market help`, `/sell`, `/listings`. Run `/admin health` from the owner account.
 
@@ -109,18 +113,7 @@ Run `/market help`, `/sell`, `/listings`. Run `/admin health` from the owner acc
 
 ## Where secrets go
 
-Type them only in the Koyeb environment variables screen. Never in GitHub files. On iPhone you do not create a `.env` file.
-
----
-
-## Backup hosts if Koyeb refuses the app
-
-Same four secrets, same start command.
-
-- https://justrunmy.app/discord-bots
-- HeavenCloud panel after claiming in their Discord
-
-Skip free Render and free Replit. They sleep and the bot goes offline.
+Type them only in the JustRunMy.App environment variable screen. Never in the GitHub zip.
 
 ---
 
