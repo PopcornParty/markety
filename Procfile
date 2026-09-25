@@ -1,0 +1,1 @@
+worker: npx prisma migrate deploy && node dist/index.js
